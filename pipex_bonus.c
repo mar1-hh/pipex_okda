@@ -51,6 +51,8 @@ void	proc_1(t_pip *data, char **av, char **envp)
 			open_herdoc(av);
 		close(data->pip[READ]);
 		new_in_fd = open(av[1], O_RDONLY);
+		if (new_in_fd == -1)
+			p_error("pipex: input", 1);
 		dup2(new_in_fd, 0);
 		close(new_in_fd);
 		dup2(data->pip[WRITE], 1);

@@ -21,13 +21,13 @@ FLAG = .bonus
 all: ${NAME}
 
 ${NAME}: ${LIBFT} ${OBJ}
-	${CC} ${CFLAGS} $^ -o $@
+	${CC} ${CFLAGS} ${OBJ} ${LIBFT} -o $@
 
 bonus: ${LIBFT} ${OBJ_BONUS}
-	${CC} ${CFLAGS} $^ -o ${NAME}
+	${CC} ${CFLAGS} ${OBJ_BONUS} ${LIBFT} -o ${NAME}
 
 ${LIBFT}:
-	${MAKE} bonus -C ./libft
+	${MAKE} -C ./libft
 
 %_bonus.o: %_bonus.c pipex_bonus.h
 	${CC} ${CFLAGS} -c $< -o $@
