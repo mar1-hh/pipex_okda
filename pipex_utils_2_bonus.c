@@ -20,6 +20,11 @@ void	middle_proc(t_pip *data, int i, char **env, int ac)
 	data[i].n = fork();
 	if (!data[i].n)
 	{
+		if (!data[i].matrix[0])
+		{
+			data_finish(data);
+			p_error("command not found", 0);
+		}
 		j = i + 1;
 		while (j < data->cmds_size)
 		{
@@ -34,6 +39,8 @@ void	middle_proc(t_pip *data, int i, char **env, int ac)
 		dup2(data[i].pip[WRITE], 1);
 		close(data[i].pip[WRITE]);
 		execve(data[i].path, data[i].matrix, env);
+		data_finish(data);
+		free(data);
 		exit(1);
 	}
 }

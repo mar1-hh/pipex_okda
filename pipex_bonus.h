@@ -35,6 +35,7 @@ typedef struct s_pip
 	int		n;
 }			t_pip;
 
+void		data_finish(t_pip *data);
 char		**ft_split_shell(char const *s);
 char		*extract_word_2(char const *str);
 int			is_valide(const char *s);

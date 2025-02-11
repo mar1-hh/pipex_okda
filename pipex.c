@@ -12,6 +12,16 @@
 
 #include "pipex.h"
 
+void	data_finish(t_data *data)
+{
+	close(data->current_pipe[0]);
+	close(data->current_pipe[1]);
+	free_matrix(data->matrix_1);
+	free_matrix(data->matrix_2);
+	free(data->path_1);
+	free(data->path_2);
+}
+
 void	init_data(t_data *data, char **av, char **envp)
 {
 	data->matrix_1 = ft_split_shell(av[2]);
@@ -27,15 +37,22 @@ void	proc_1(t_data *data, char *str, char **envp)
 
 	close(data->current_pipe[0]);
 	if (!data->matrix_1[0])
+	{
+		data_finish(data);
 		p_error("command not found", 0);
+	}
 	new_in_fd = open(str, O_RDONLY);
 	if (new_in_fd == -1)
+	{
+		data_finish(data);
 		p_error("pipex: input", 1);
+	}
 	dup2(new_in_fd, 0);
 	close(new_in_fd);
 	dup2(data->current_pipe[1], 1);
 	close(data->current_pipe[1]);
 	execve(data->path_1, data->matrix_1, envp);
+	data_finish(data);
 	exit(1);
 }
 
@@ -45,26 +62,23 @@ void	proc_2(t_data *data, char *str, char **envp)
 
 	close(data->current_pipe[1]);
 	if (!data->matrix_2[0])
+	{
+		data_finish(data);
 		p_error("command not found", 0);
+	}
 	new_out_fd = open(str, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (new_out_fd == -1)
+	{
+		data_finish(data);
 		p_error("pipex: input", 1);
+	}
 	dup2(data->current_pipe[0], 0);
 	close(data->current_pipe[0]);
 	dup2(new_out_fd, 1);
 	close(new_out_fd);
 	execve(data->path_2, data->matrix_2, envp);
+	data_finish(data);
 	exit(1);
-}
-
-void	data_finish(t_data *data)
-{
-	close(data->current_pipe[0]);
-	close(data->current_pipe[1]);
-	free_matrix(data->matrix_1);
-	free_matrix(data->matrix_2);
-	free(data->path_1);
-	free(data->path_2);
 }
 
 int	main(int ac, char **av, char **envp)
