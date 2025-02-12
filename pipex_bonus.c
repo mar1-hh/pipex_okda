@@ -40,10 +40,11 @@ void	proc_1(t_pip *data, char **av, char **envp)
 	data->n = fork();
 	if (!data->n)
 	{
-		if (!data->matrix[0])
+		if (!data->path)
 		{
 			data_finish(data);
-			p_error("command not found", 0);
+			free(data);
+			p_error("command not found", 127);
 		}
 		j = 1;
 		while (j < data->cmds_size)
@@ -80,11 +81,6 @@ void	proc_finale(t_pip *data, char **av, char **envp, int ac)
 	data[data->cmds_size - 1].n = fork();
 	if (!data[data->cmds_size - 1].n)
 	{
-		if (!data[data->cmds_size - 1].matrix[0])
-		{
-			data_finish(data);
-			p_error("command not found", 0);
-		}
 		close(data[data->cmds_size - 1].pip[READ]);
 		close(data[data->cmds_size - 1].pip[WRITE]);
 		close(data[data->cmds_size - 2].pip[WRITE]);
@@ -102,6 +98,12 @@ void	proc_finale(t_pip *data, char **av, char **envp, int ac)
 		}
 		dup2(new_out_fd, 1);
 		close(new_out_fd);
+		if (!data[data->cmds_size - 1].path)
+		{
+			data_finish(data);
+			free(data);
+			p_error("command not found", 127);
+		}
 		execve(data[data->cmds_size - 1].path, data[data->cmds_size - 1].matrix,
 			envp);
 		data_finish(data);

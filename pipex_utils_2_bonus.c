@@ -20,10 +20,11 @@ void	middle_proc(t_pip *data, int i, char **env, int ac)
 	data[i].n = fork();
 	if (!data[i].n)
 	{
-		if (!data[i].matrix[0])
+		if (!data[i].path)
 		{
 			data_finish(data);
-			p_error("command not found", 0);
+			free(data);
+			p_error("command not found", 127);
 		}
 		j = i + 1;
 		while (j < data->cmds_size)
