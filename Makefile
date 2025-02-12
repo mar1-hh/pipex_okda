@@ -6,7 +6,7 @@ CFLAGS = -Wall -Wextra -Werror
 
 SRCS = pipex.c pipex_utils.c split_shell.c split_shell_2.c
 
-SRCS_BONUS = pipex_bonus.c pipex_utils_bonus.c split_shell_bonus.c split_shell_bonus_2.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c pipex_utils_2_bonus.c
+SRCS_BONUS = pipex_bonus.c pipex_utils_bonus.c split_shell_bonus.c split_shell_bonus_2.c get_next_line/get_next_line.c get_next_line/get_next_line_utils.c pipex_utils_2_bonus.c finish_n_data_bonus.c
 
 OBJ = ${SRCS:.c=.o}
 
@@ -16,15 +16,18 @@ LIBFT = libft/libft.a
 
 RM = rm -rf
 
-FLAG = .bonus
+F_BONUS = .bonus
 
 all: ${NAME}
 
 ${NAME}: ${LIBFT} ${OBJ}
 	${CC} ${CFLAGS} ${OBJ} ${LIBFT} -o $@
 
-bonus: ${LIBFT} ${OBJ_BONUS}
+bonus: ${F_BONUS}
+
+${F_BONUS}: ${LIBFT} ${OBJ_BONUS}
 	${CC} ${CFLAGS} ${OBJ_BONUS} ${LIBFT} -o ${NAME}
+	@touch $@
 
 ${LIBFT}:
 	${MAKE} -C ./libft

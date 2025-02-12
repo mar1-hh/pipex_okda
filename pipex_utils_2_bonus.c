@@ -56,7 +56,6 @@ void	process_handle(t_pip *data, char **av, int ac, char **envp)
 	}
 }
 
-
 void	init_data(t_pip *data, int ac, char **av, char **envp)
 {
 	int	i;
@@ -72,8 +71,6 @@ void	init_data(t_pip *data, int ac, char **av, char **envp)
 		if (!data[i].matrix)
 			finish_n_data(data, i);
 		data[i].path = debug_okda(envp, data[i].matrix[0]);
-		if (!data[i].path)
-			finish_n_data(data, i);
 		if (pipe(data[i].pip) == -1)
 			finish_n_data(data, i);
 		data[i].cmds_size = ac - (flag + 1);
