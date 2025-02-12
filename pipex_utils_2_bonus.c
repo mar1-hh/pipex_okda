@@ -6,33 +6,20 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 14:36:34 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/11 16:10:57 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:41:34 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	middle_proc(t_pip *data, int i, char **env, int ac)
+void	middle_proc(t_pip *data, int i, char **env)
 {
-	int	j;
-
-	(void)ac;
 	data[i].n = fork();
 	if (!data[i].n)
 	{
 		if (!data[i].path)
-		{
-			data_finish(data);
-			free(data);
-			p_error("command not found", 127);
-		}
-		j = i + 1;
-		while (j < data->cmds_size)
-		{
-			close(data[j].pip[READ]);
-			close(data[j].pip[WRITE]);
-			j++;
-		}
+			t_error("command not found", data, 127);
+		close_pipes(data, i + 1);
 		close(data[i - 1].pip[WRITE]);
 		close(data[i].pip[READ]);
 		dup2(data[i - 1].pip[READ], 0);
@@ -58,7 +45,7 @@ void	process_handle(t_pip *data, char **av, int ac, char **envp)
 		else if (i == data->cmds_size - 1)
 			proc_finale(data, av, envp, ac);
 		else
-			middle_proc(data, i, envp, ac);
+			middle_proc(data, i, envp);
 		if (i)
 		{
 			close(data[i - 1].pip[READ]);
@@ -101,4 +88,14 @@ int	ft_strcmp(char *str, char *str2)
 		i++;
 	}
 	return (0);
+}
+
+void	close_pipes(t_pip *data, int i)
+{
+	while (i < data->cmds_size)
+	{
+		close(data[i].pip[0]);
+		close(data[i].pip[1]);
+		i++;
+	}
 }

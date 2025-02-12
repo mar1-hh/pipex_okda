@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:21:16 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/11 16:11:19 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:41:28 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,34 +35,19 @@ void	open_herdoc(char **av)
 void	proc_1(t_pip *data, char **av, char **envp)
 {
 	int	new_in_fd;
-	int	j;
 
 	data->n = fork();
 	if (!data->n)
 	{
 		if (!data->path)
-		{
-			data_finish(data);
-			free(data);
-			p_error("command not found", 127);
-		}
-		j = 1;
-		while (j < data->cmds_size)
-		{
-			close(data[j].pip[READ]);
-			close(data[j].pip[WRITE]);
-			j++;
-		}
+			t_error("command not found", data, 127);
+		close_pipes(data, 1);
 		if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
 			open_herdoc(av);
 		close(data->pip[READ]);
 		new_in_fd = open(av[1], O_RDONLY);
 		if (new_in_fd == -1)
-		{
-			data_finish(data);
-			free(data);
-			p_error("pipex: input", 1);
-		}
+			t_error("pipex: input", data, 1);
 		dup2(new_in_fd, 0);
 		close(new_in_fd);
 		dup2(data->pip[WRITE], 1);
@@ -91,23 +76,14 @@ void	proc_finale(t_pip *data, char **av, char **envp, int ac)
 		else
 			new_out_fd = open(av[ac - 1], O_CREAT | O_TRUNC | O_WRONLY, 0644);
 		if (new_out_fd == -1)
-		{
-			data_finish(data);
-			free(data);
-			p_error("pipex: input", 1);
-		}
+			t_error("pipex: input", data, 1);
 		dup2(new_out_fd, 1);
 		close(new_out_fd);
 		if (!data[data->cmds_size - 1].path)
-		{
-			data_finish(data);
-			free(data);
-			p_error("command not found", 127);
-		}
+			t_error("command not found", data, 127);
 		execve(data[data->cmds_size - 1].path, data[data->cmds_size - 1].matrix,
 			envp);
 		data_finish(data);
-		free(data);
 		exit(1);
 	}
 }
@@ -123,6 +99,7 @@ void	data_finish(t_pip *data)
 		free_matrix(data[i].matrix);
 		i++;
 	}
+	free(data);
 }
 
 int	main(int ac, char **av, char **envp)
@@ -147,7 +124,6 @@ int	main(int ac, char **av, char **envp)
 	if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
 		unlink(av[1]);
 	data_finish(data);
-	free(data);
 	if (WIFEXITED(exit_st))
 		return (WEXITSTATUS(exit_st));
 	return (0);

@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:24:37 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/08 12:28:21 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 13:42:05 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,8 +76,9 @@ char	*debug_okda(char **env, char *cmd)
 	return (NULL);
 }
 
-void	p_error(char *str, int status)
+void	t_error(char *str, t_pip *data, int status)
 {
+	data_finish(data);
 	perror(str);
 	exit(status);
 }
