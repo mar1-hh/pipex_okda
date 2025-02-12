@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:24:37 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 13:42:05 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:26:58 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,13 @@ char	*helper_path(char *str, char *cmd, int size)
 	free(complete_path);
 	free(cmd);
 	return (NULL);
+}
+
+void	fork_fail(t_pip *data, int i)
+{
+	data_finish(data);
+	close_pipes(data, i);
+	exit(1);
 }
 
 char	*debug_okda(char **env, char *cmd)

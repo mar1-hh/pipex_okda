@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/11 14:36:34 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 13:41:34 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:50:49 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,10 @@ void	middle_proc(t_pip *data, int i, char **env)
 		close(data[i].pip[WRITE]);
 		execve(data[i].path, data[i].matrix, env);
 		data_finish(data);
-		free(data);
 		exit(1);
 	}
+	else if (data[i].n == -1)
+		fork_fail(data, data->cmds_size);
 }
 
 void	process_handle(t_pip *data, char **av, int ac, char **envp)
@@ -55,6 +56,7 @@ void	process_handle(t_pip *data, char **av, int ac, char **envp)
 	}
 }
 
+
 void	init_data(t_pip *data, int ac, char **av, char **envp)
 {
 	int	i;
@@ -67,8 +69,13 @@ void	init_data(t_pip *data, int ac, char **av, char **envp)
 	while (i < ac - (flag + 1))
 	{
 		data[i].matrix = ft_split_shell(av[i + flag]);
+		if (!data[i].matrix)
+			finish_n_data(data, i);
 		data[i].path = debug_okda(envp, data[i].matrix[0]);
-		pipe(data[i].pip);
+		if (!data[i].path)
+			finish_n_data(data, i);
+		if (pipe(data[i].pip) == -1)
+			finish_n_data(data, i);
 		data[i].cmds_size = ac - (flag + 1);
 		i++;
 	}

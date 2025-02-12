@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:21:16 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 13:41:28 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:47:32 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,8 @@ void	proc_1(t_pip *data, char **av, char **envp)
 		free(data);
 		exit(1);
 	}
+	else if (data->n == -1)
+		fork_fail(data, 0);
 }
 
 void	proc_finale(t_pip *data, char **av, char **envp, int ac)
@@ -66,11 +68,8 @@ void	proc_finale(t_pip *data, char **av, char **envp, int ac)
 	data[data->cmds_size - 1].n = fork();
 	if (!data[data->cmds_size - 1].n)
 	{
-		close(data[data->cmds_size - 1].pip[READ]);
-		close(data[data->cmds_size - 1].pip[WRITE]);
-		close(data[data->cmds_size - 2].pip[WRITE]);
 		dup2(data[data->cmds_size - 2].pip[READ], 0);
-		close(data[data->cmds_size - 2].pip[READ]);
+		close_pipes(data, data->cmds_size - 2);
 		if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
 			new_out_fd = open(av[ac - 1], O_CREAT | O_APPEND | O_WRONLY, 0644);
 		else
@@ -86,6 +85,8 @@ void	proc_finale(t_pip *data, char **av, char **envp, int ac)
 		data_finish(data);
 		exit(1);
 	}
+	else if (data[data->cmds_size - 1].n == -1)
+		fork_fail(data, data->cmds_size);
 }
 
 void	data_finish(t_pip *data)
@@ -111,6 +112,8 @@ int	main(int ac, char **av, char **envp)
 	if (ac < 5 || (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])) && ac < 6))
 		return (127);
 	data = malloc((ac - 3) * sizeof(t_pip));
+	if (!data)
+		return (1);
 	init_data(data, ac, av, envp);
 	process_handle(data, av, ac, envp);
 	i = data->cmds_size - 1;

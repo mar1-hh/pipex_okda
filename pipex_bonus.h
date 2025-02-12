@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:24:55 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 13:41:44 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/12 15:50:17 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,6 @@ void		init_data(t_pip *data, int ac, char **av, char **envp);
 void		proc_1(t_pip *data, char **av, char **envp);
 void		proc_finale(t_pip *data, char **av, char **envp, int ac);
 void		close_pipes(t_pip *data, int i);
+void		fork_fail(t_pip *data, int i);
+void		finish_n_data(t_pip *data, int n);
 #endif
