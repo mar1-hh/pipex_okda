@@ -40,7 +40,6 @@ char	*helper_path(char *str, char *cmd, int size)
 		return (NULL);
 	}
 	free(complete_path);
-	helper_path_cmd(commands_path, cmd);
 	return (helper_path_cmd(commands_path, cmd));
 }
 
@@ -54,6 +53,7 @@ void	fork_fail(t_pip *data, int i)
 char	*debug_okda(char **env, char *cmd)
 {
 	char	*str;
+	char	*cmdr;
 	int		i;
 
 	if (!cmd)
@@ -61,15 +61,15 @@ char	*debug_okda(char **env, char *cmd)
 	if (!access(cmd, X_OK))
 		return (ft_strdup(cmd));
 	if (cmd[0] != '/')
-		cmd = ft_strjoin("/", cmd);
-	if (!cmd)
+		cmdr = ft_strjoin("/", cmd);
+	if (!cmdr)
 		return (NULL);
 	i = 0;
 	while (env[i])
 	{
 		str = ft_strnstr(env[i], "PATH=", ft_strlen("PATH="));
 		if (str)
-			return (helper_path(str, cmd, ft_strlen("PATH=")));
+			return (helper_path(str, cmdr, ft_strlen("PATH=")));
 		i++;
 	}
 	return (NULL);

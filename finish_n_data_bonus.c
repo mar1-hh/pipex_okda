@@ -40,11 +40,21 @@ char	*helper_path_cmd(char **commands_path, char *cmd)
 	{
 		command_path = ft_strjoin(commands_path[i], cmd);
 		if (!command_path)
+		{
+			free_matrix(commands_path);
+			free(cmd);
 			return (NULL);
+		}
 		if (!access(command_path, X_OK))
+		{
+			free_matrix(commands_path);
+			free(cmd);
 			return (command_path);
+		}
 		free(command_path);
 		i++;
 	}
+	free_matrix(commands_path);
+	free(cmd);
 	return (NULL);
 }

@@ -23,7 +23,7 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include <unistd.h>
-
+#include <sys/wait.h>
 typedef struct s_pip
 {
 	char	**matrix;

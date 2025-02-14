@@ -20,7 +20,7 @@
 # include <stdlib.h>
 # include <sys/types.h>
 # include <unistd.h>
-
+#include <sys/wait.h>
 typedef struct s_data
 {
 	char	**matrix_1;
