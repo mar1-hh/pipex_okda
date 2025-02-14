@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/06 12:36:51 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/08 21:40:14 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:37:24 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,10 @@
 # define PIPEX_H
 
 # include "libft.h"
-# include "pipex.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
-# include <sys/wait.h>
 # include <unistd.h>
 
 typedef struct s_data

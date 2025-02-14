@@ -41,6 +41,7 @@ ${LIBFT}:
 clean:
 	${MAKE} clean -C ./libft
 	${RM} ${OBJ} ${OBJ_BONUS}
+	${RM} ${F_BONUS}
 
 fclean: clean
 	${MAKE} fclean -C ./libft

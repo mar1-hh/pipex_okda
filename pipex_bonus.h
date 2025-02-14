@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:24:55 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 15:50:17 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:36:41 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,12 +18,10 @@
 # define WRITE 1
 
 # include "libft.h"
-# include "pipex.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <sys/types.h>
-# include <sys/wait.h>
 # include <unistd.h>
 
 typedef struct s_pip
@@ -53,4 +51,5 @@ void		proc_finale(t_pip *data, char **av, char **envp, int ac);
 void		close_pipes(t_pip *data, int i);
 void		fork_fail(t_pip *data, int i);
 void		finish_n_data(t_pip *data, int n);
+char		*helper_path_cmd(char **commands_path, char *cmd);
 #endif

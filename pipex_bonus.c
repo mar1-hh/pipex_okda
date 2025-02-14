@@ -6,18 +6,20 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:21:16 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 15:47:32 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/13 15:01:07 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "pipex_bonus.h"
 
-void	open_herdoc(char **av)
+void	open_herdoc(char **av, t_pip *data)
 {
 	int		new_in_fd;
 	char	*line;
 
-	new_in_fd = open("here_doc", O_CREAT | O_RDWR | O_APPEND, 0644);
+	new_in_fd = open("here_doc", O_CREAT | O_WRONLY | O_APPEND, 0644);
+	if (new_in_fd == -1)
+		t_error("pipex: input", data, 1);
 	line = get_next_line(0);
 	line[ft_strlen(line) - 1] = 0;
 	while (ft_strcmp(av[2], line))
@@ -43,7 +45,7 @@ void	proc_1(t_pip *data, char **av, char **envp)
 			t_error("command not found", data, 127);
 		close_pipes(data, 1);
 		if (!ft_strncmp(av[1], "here_doc", ft_strlen(av[1])))
-			open_herdoc(av);
+			open_herdoc(av, data);
 		close(data->pip[READ]);
 		new_in_fd = open(av[1], O_RDONLY);
 		if (new_in_fd == -1)

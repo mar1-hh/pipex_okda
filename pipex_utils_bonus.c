@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:24:37 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/12 15:26:58 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/14 11:34:56 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,30 +28,24 @@ void	free_matrix(char **matrix)
 char	*helper_path(char *str, char *cmd, int size)
 {
 	char	*complete_path;
-	char	*command_path;
 	char	**commands_path;
-	int		i;
 
 	complete_path = ft_substr(str, size, ft_strlen(str) - size);
-	commands_path = ft_split(complete_path, ':');
-	i = 0;
-	while (commands_path[i])
+	if (!complete_path)
 	{
-		command_path = ft_strjoin(commands_path[i], cmd);
-		if (!access(command_path, X_OK))
-		{
-			free_matrix(commands_path);
-			free(complete_path);
-			free(cmd);
-			return (command_path);
-		}
-		free(command_path);
-		i++;
+		free(cmd);
+		return (NULL);
 	}
-	free_matrix(commands_path);
+	commands_path = ft_split(complete_path, ':');
+	if (!commands_path)
+	{
+		free(cmd);
+		free(complete_path);
+		return (NULL);
+	}
 	free(complete_path);
-	free(cmd);
-	return (NULL);
+	helper_path_cmd(commands_path, cmd);
+	return (helper_path_cmd(commands_path, cmd));
 }
 
 void	fork_fail(t_pip *data, int i)
@@ -72,6 +66,8 @@ char	*debug_okda(char **env, char *cmd)
 		return (ft_strdup(cmd));
 	if (cmd[0] != '/')
 		cmd = ft_strjoin("/", cmd);
+	if (!cmd)
+		return (NULL);
 	i = 0;
 	while (env[i])
 	{
