@@ -6,7 +6,7 @@
 /*   By: msaadaou <msaadaou@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/02/08 12:24:37 by msaadaou          #+#    #+#             */
-/*   Updated: 2025/02/14 11:34:56 by msaadaou         ###   ########.fr       */
+/*   Updated: 2025/02/14 12:35:18 by msaadaou         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,14 +32,10 @@ char	*helper_path(char *str, char *cmd, int size)
 
 	complete_path = ft_substr(str, size, ft_strlen(str) - size);
 	if (!complete_path)
-	{
-		free(cmd);
 		return (NULL);
-	}
 	commands_path = ft_split(complete_path, ':');
 	if (!commands_path)
 	{
-		free(cmd);
 		free(complete_path);
 		return (NULL);
 	}
